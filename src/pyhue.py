@@ -37,13 +37,10 @@ class Bridge(object):
     def _request(self, method, route, data={}):
         content = json.dumps(data).lower()
         str_route = '/'.join(['/api', self.username] + route)
-        try:
-            conn = HTTPConnection(self.ip_address)
-            conn.request(method, str_route, content)
-            response = conn.getresponse()
-            return json.loads(response.read().decode())
-        except:
-            raise HueException("Not able to connect to the bridge")
+        conn = HTTPConnection(self.ip_address)
+        conn.request(method, str_route, content)
+        response = conn.getresponse()
+        return json.loads(response.read())
 
     def __get_api_objects(self, cls):
         result = self._request('GET', [cls.ROUTE])
@@ -162,4 +159,6 @@ class Schedule(ApiObject):
             raise HueException("Invalid attribute")
 
     def __del__(self):
-        self.bridge._request('DELETE', [self.ROUTE, self.id])
+        # self.bridge._request('DELETE', [self.ROUTE, self.id])
+	pass
+
